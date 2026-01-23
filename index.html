@@ -68,11 +68,13 @@ html, body {
 }
 
 #video-frame {
-  width: min(900px, 90vw);
+  width: 100%;
+  max-width: 900px;
   aspect-ratio: 16 / 9;
-  position: relative;
+  margin: 0 auto;
   border: 1px solid rgba(255,255,255,.15);
 }
+
 
 /* Poster overlay */
 #poster {
@@ -90,12 +92,14 @@ html, body {
 }
 
 /* Video */
-#video-frame iframe {
+#video-frame video {
   width: 100%;
-  height: 100%;
-  border: none;
-  z-index: 1;
+  height: auto;           /* ← THIS FIXES MOBILE */
+  max-height: 70vh;       /* ← PREVENTS OVERFLOW */
+  object-fit: contain;    /* ← NO CROPPING */
+  background: #000;
 }
+
 
 /* ===== LABEL ===== */
 #label {
