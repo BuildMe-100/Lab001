@@ -69,13 +69,12 @@ html, body {
 
 #video-frame {
   width: 100%;
-  max-width: 760px;       /* ← smaller, calmer on desktop */
+  max-width: 760px;
   aspect-ratio: 16 / 9;
   margin: 0 auto;
   border: 1px solid rgba(255,255,255,.15);
+  position: relative;
 }
-
-
 
 /* Poster overlay */
 #poster {
@@ -95,12 +94,11 @@ html, body {
 /* Video */
 #video-frame video {
   width: 100%;
-  height: auto;           /* ← THIS FIXES MOBILE */
-  max-height: 70vh;       /* ← PREVENTS OVERFLOW */
-  object-fit: contain;    /* ← NO CROPPING */
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
   background: #000;
 }
-
 
 /* ===== LABEL ===== */
 #label {
@@ -143,8 +141,13 @@ html, body {
   opacity: 1;
 }
 
-.show-address #address {
-  display: inline-block;
+/* ===== ROCKET ===== */
+.rocket {
+  position: fixed;
+  font-size: 28px;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
 }
 </style>
 </head>
@@ -162,14 +165,13 @@ html, body {
 <div id="lab">
   <div id="video-frame">
     <div id="poster"></div>
-   <video
+    <video
       id="lab-video"
       src="lab1.mp4"
       controls
       playsinline
     ></video>
   </div>
-
 
   <div id="label">
     <h1 id="lab-title">LAB 001</h1>
@@ -193,8 +195,48 @@ const poster = document.getElementById('poster');
 
 let addressVisible = false;
 
+/* 🚀 ROCKET LAUNCH */
+function launchRocket() {
+  const rocket = document.createElement('div');
+  rocket.className = 'rocket';
+  rocket.textContent = '🚀';
+
+  const startEdge = Math.floor(Math.random() * 4);
+  let startX, startY;
+
+  if (startEdge === 0) { // left
+    startX = -40;
+    startY = Math.random() * window.innerHeight;
+  } else if (startEdge === 1) { // right
+    startX = window.innerWidth + 40;
+    startY = Math.random() * window.innerHeight;
+  } else if (startEdge === 2) { // top
+    startX = Math.random() * window.innerWidth;
+    startY = -40;
+  } else { // bottom
+    startX = Math.random() * window.innerWidth;
+    startY = window.innerHeight + 40;
+  }
+
+  const endX = Math.random() * window.innerWidth;
+  const endY = Math.random() * window.innerHeight;
+
+  rocket.style.left = `${startX}px`;
+  rocket.style.top = `${startY}px`;
+
+  document.body.appendChild(rocket);
+  rocket.getBoundingClientRect();
+
+  rocket.style.transition = 'transform 1.2s linear';
+  rocket.style.transform = `translate(${endX - startX}px, ${endY - startY}px)`;
+
+  setTimeout(() => rocket.remove(), 1300);
+}
+
 /* BTC PRICE CLICK */
 btcControl.onclick = async () => {
+  launchRocket(); // 🚀 EVERY CLICK
+
   btcControl.classList.add('show-price');
 
   try {
@@ -235,3 +277,4 @@ poster.onclick = () => {
 
 </body>
 </html>
+
