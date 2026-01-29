@@ -9,102 +9,263 @@
 
 <style>
 :root {
-  --bg: #050505;
   --btc: #F7931A;
+  --up: #00ff88;
+  --down: #ff3b30;
+  --bg: #050505;
+  --snap: cubic-bezier(.2,.8,.2,1);
 }
 
 * { box-sizing: border-box; }
 
 html, body {
   margin: 0;
-  padding: 0;
+  height: 100%;
   background: var(--bg);
   color: white;
   font-family: 'Space Mono', monospace;
 }
 
-/* ===== PAGE WRAP ===== */
-#page {
+/* ===== BTC CONTROL ===== */
+#btc-control {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 10;
+  cursor: pointer;
+  text-align: center;
+}
+
+#btc {
+  font-family: 'Cinzel', serif;
+  font-size: 42px;
+  color: var(--btc);
+  user-select: none;
+  text-shadow: 0 0 20px rgba(247,147,26,.4);
+}
+
+#btc-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  opacity: .6;
+  margin-top: 2px;
+}
+
+#price {
+  margin-top: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity .3s var(--snap);
+}
+
+/* ===== LAB ===== */
+#lab {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 80px;
+  padding-top: 120px;
 }
 
-/* ===== LAB 001 ===== */
-#lab-001 {
+/* LAB 001 */
+#video-frame {
+  width: 100%;
+  max-width: 760px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,.15);
+  position: relative;
+}
+
+#video-frame video {
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #000;
+}
+
+/* ===== LABEL ===== */
+#label {
+  margin-top: 14px;
   text-align: center;
-  margin-bottom: 56px;
 }
 
-#lab-001 h1 {
-  font-family: 'Cinzel', serif;
-  font-size: 20px;
-  letter-spacing: 6px;
+#label h1 {
+  font-size: 12px;
+  letter-spacing: 4px;
   margin: 0;
+  cursor: pointer;
 }
 
-#lab-001 p {
+#label p {
   font-size: 11px;
-  opacity: 0.6;
-  margin-top: 8px;
+  opacity: .6;
+  margin: 6px 0 0;
+}
+
+/* ===== ADDRESS ===== */
+#address {
+  margin-top: 12px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 8px 12px;
+  display: none;
+}
+
+#address span {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.show-price #price {
+  opacity: 1;
 }
 
 /* ===== LAB 00XX ===== */
 #lab-00xx {
+  margin-top: 48px;
   text-align: center;
+  opacity: 0.85;
 }
 
-#lab-00xx .label {
+#lab-00xx .title {
   font-size: 10px;
   letter-spacing: 3px;
   opacity: 0.6;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-#lab-00xx .frame {
-  width: 100%;
-  max-width: 520px;
-  border: 1px solid rgba(255,255,255,0.12);
-}
-
-/* ===== VIDEO ===== */
 #lab-00xx video {
   width: 100%;
+  max-width: 420px;
   height: auto;
-  display: block;
+  border: 1px solid rgba(255,255,255,0.12);
   background: #000;
+}
+
+/* ===== ROCKET ===== */
+.rocket {
+  position: fixed;
+  font-size: 28px;
+  pointer-events: none;
+  z-index: 9999;
 }
 </style>
 </head>
 
 <body>
 
-<div id="page">
+<!-- BTC CONTROL -->
+<div id="btc-control">
+  <div id="btc">₿</div>
+  <div id="btc-label">CURRENT PRICE 🚀</div>
+  <div id="price">$—</div>
+</div>
+
+<!-- LAB -->
+<div id="lab">
 
   <!-- LAB 001 -->
-  <section id="lab-001">
-    <h1>LAB 001</h1>
+  <div id="video-frame">
+    <video
+      id="lab-video"
+      src="lab1.mp4"
+      controls
+      playsinline
+    ></video>
+  </div>
+
+  <div id="label">
+    <h1 id="lab-title">LAB 001</h1>
     <p>Performance Science · Systems & Environment</p>
-  </section>
-
-  <!-- LAB 00XX -->
-  <section id="lab-00xx">
-    <div class="label">LAB 00XX</div>
-
-    <div class="frame">
-      <video
-        src="lab1.mp4"
-        autoplay
-        muted
-        loop
-        playsinline
-      ></video>
+    <div id="address">
+      BTC ADDRESS
+      <span>bc1qknzygd69f49ep4t70n96cvy56jmut0maezv7v7</span>
     </div>
-  </section>
+  </div>
+
+  <!-- LAB 00XX (SECOND LAB, ADDITIVE ONLY) -->
+  <div id="lab-00xx">
+    <div class="title">LAB 00XX</div>
+    <video
+      src="lab1.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
+  </div>
 
 </div>
+
+<script>
+const btcControl = document.getElementById('btc-control');
+const priceEl = document.getElementById('price');
+
+const labTitle = document.getElementById('lab-title');
+const addressEl = document.getElementById('address');
+const addrText = addressEl.querySelector('span');
+
+let addressVisible = false;
+
+/* 🚀 ROCKET */
+function launchRocket() {
+  const rocket = document.createElement('div');
+  rocket.className = 'rocket';
+  rocket.textContent = '🚀';
+
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight;
+
+  const endX = (Math.random() * 2 - 0.5) * window.innerWidth * 1.5;
+  const endY = (Math.random() * 2 - 0.5) * window.innerHeight * 1.5;
+
+  rocket.style.left = `${startX}px`;
+  rocket.style.top = `${startY}px`;
+
+  document.body.appendChild(rocket);
+  rocket.getBoundingClientRect();
+
+  rocket.style.transition = 'transform 2.8s linear';
+  rocket.style.transform = `translate(${endX}px, ${endY}px)`;
+
+  setTimeout(() => rocket.remove(), 3000);
+}
+
+/* BTC CLICK */
+btcControl.onclick = async () => {
+  launchRocket();
+  btcControl.classList.add('show-price');
+
+  try {
+    const r = await fetch(
+      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true'
+    );
+    const d = await r.json();
+    const p = Math.round(d.bitcoin.usd);
+    const up = d.bitcoin.usd_24h_change >= 0;
+
+    priceEl.textContent = `$${p.toLocaleString()}`;
+    priceEl.style.color = up ? 'var(--up)' : 'var(--down)';
+  } catch {
+    priceEl.textContent = 'SIGNAL LOST';
+  }
+
+  setTimeout(() => btcControl.classList.remove('show-price'), 10000);
+};
+
+/* LAB 001 ADDRESS TOGGLE */
+labTitle.onclick = () => {
+  addressVisible = !addressVisible;
+  addressEl.style.display = addressVisible ? 'inline-block' : 'none';
+  if (addressVisible) navigator.clipboard.writeText(addrText.textContent);
+};
+</script>
 
 </body>
 </html>
