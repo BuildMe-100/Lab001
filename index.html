@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAB 001</title>
+<title>LABS</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Space+Mono&display=swap" rel="stylesheet">
 
@@ -20,7 +20,6 @@
 
 html, body {
   margin: 0;
-  height: 100%;
   background: var(--bg);
   color: white;
   font-family: 'Space Mono', monospace;
@@ -31,7 +30,7 @@ html, body {
   position: fixed;
   top: 24px;
   left: 24px;
-  z-index: 10;
+  z-index: 100;
   cursor: pointer;
   text-align: center;
 }
@@ -59,13 +58,18 @@ html, body {
 
 .show-price #price { opacity: 1; }
 
-/* ===== LAB WRAP ===== */
-#lab {
-  min-height: 100vh;
+/* ===== PAGE ===== */
+#labs {
+  padding-top: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 120px;
+}
+
+/* ===== LAB BLOCK ===== */
+.lab-block {
+  margin-bottom: 72px;
+  text-align: center;
 }
 
 /* ===== VIDEO ===== */
@@ -86,20 +90,19 @@ html, body {
 /* ===== LABEL ===== */
 .label {
   margin-top: 14px;
-  text-align: center;
 }
 
 .btc-title {
   font-size: 12px;
   letter-spacing: 4px;
-  margin: 0;
   cursor: pointer;
+  margin: 0;
 }
 
 .label p {
   font-size: 11px;
   opacity: .6;
-  margin: 6px 0 0;
+  margin-top: 6px;
 }
 
 /* ===== ADDRESS ===== */
@@ -119,22 +122,8 @@ html, body {
   word-break: break-all;
 }
 
-/* ===== LAB 00XX ===== */
-#lab-00xx {
-  margin-top: 48px;
-  text-align: center;
-  opacity: 0.85;
-}
-
-#lab-00xx .title {
-  font-size: 10px;
-  letter-spacing: 3px;
-  opacity: 0.6;
-  margin-bottom: 8px;
-}
-
-#lab-00xx video {
-  width: 100%;
+/* ===== SECONDARY LAB STYLE ===== */
+.lab-secondary video {
   max-width: 420px;
   border: 1px solid rgba(255,255,255,0.12);
 }
@@ -158,42 +147,43 @@ html, body {
   <div id="price">$—</div>
 </div>
 
-<div id="lab">
+<!-- LABS -->
+<div id="labs">
 
   <!-- LAB 0001 -->
-  <div class="video-frame">
-    <video src="0001.mp4" controls playsinline></video>
-  </div>
+  <div class="lab-block">
+    <div class="video-frame">
+      <video src="0001.mp4" controls playsinline></video>
+    </div>
 
-  <div class="label">
-    <h1 class="btc-title" data-address="bc1qknzygd69f49ep4t70n96cvy56jmut0maezv7v7">
-      BTC Address: LAB 0001
-    </h1>
-    <p>Ground Lab 0001 · Architectural design for systems & environment education</p>
-    <div class="address"><span></span></div>
+    <div class="label">
+      <h1 class="btc-title" data-address="bc1qknzygd69f49ep4t70n96cvy56jmut0maezv7v7">
+        BTC Address: LAB 0001
+      </h1>
+      <p>Ground Lab 0001 · Architectural systems & environment education</p>
+      <div class="address"><span></span></div>
+    </div>
   </div>
 
   <!-- LAB 00XX -->
-  <div id="lab-00xx">
-    <div class="title">LAB 00XX</div>
-    <video src="lab1.mp4" autoplay muted loop playsinline></video>
-  </div>
+  <div class="lab-block lab-secondary">
+    <div class="video-frame">
+      <video src="lab1.mp4" autoplay muted loop playsinline></video>
+    </div>
 
-  <div class="label">
-    <h1 class="btc-title" data-address="bc1exampleaddressforlab00xx">
-      BTC Address: LAB 00XX
-    </h1>
-    <p>Ground Lab 00XX · Architectural innovative spaces — future design</p>
-    <div class="address"><span></span></div>
+    <div class="label">
+      <h1 class="btc-title" data-address="bc1exampleaddressforlab00xx">
+        BTC Address: LAB 00XX
+      </h1>
+      <p>Ground Lab 00XX · Experimental & future design spaces</p>
+      <div class="address"><span></span></div>
+    </div>
   </div>
 
 </div>
 
 <script>
-/* ===== BTC PRICE + ROCKET ===== */
-const btcControl = document.getElementById('btc-control');
-const priceEl = document.getElementById('price');
-
+/* ===== ROCKET ===== */
 function launchRocket() {
   const r = document.createElement('div');
   r.className = 'rocket';
@@ -212,15 +202,19 @@ function launchRocket() {
   setTimeout(() => r.remove(), 4200);
 }
 
+/* ===== BTC PRICE ===== */
+const btcControl = document.getElementById('btc-control');
+const priceEl = document.getElementById('price');
+
 btcControl.onclick = async () => {
   launchRocket();
   btcControl.classList.add('show-price');
 
   try {
-    const res = await fetch(
+    const r = await fetch(
       'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true'
     );
-    const d = await res.json();
+    const d = await r.json();
     const p = Math.round(d.bitcoin.usd);
     priceEl.textContent = `$${p.toLocaleString()}`;
     priceEl.style.color =
@@ -232,7 +226,7 @@ btcControl.onclick = async () => {
   setTimeout(() => btcControl.classList.remove('show-price'), 10000);
 };
 
-/* ===== BTC ADDRESS TOGGLE (ALL LABS) ===== */
+/* ===== ADDRESS TOGGLE (ALL LABS) ===== */
 document.querySelectorAll('.btc-title').forEach(title => {
   title.onclick = () => {
     const addr = title.dataset.address;
