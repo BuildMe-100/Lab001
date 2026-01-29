@@ -170,11 +170,11 @@ html, body {
 <!-- LAB -->
 <div id="lab">
 
-  <!-- LAB 001 -->
+  <!-- LAB 0001 -->
   <div id="video-frame">
     <video
       id="lab-video"
-      src="lab1.mp4"
+      src="0001.mp4"
       controls
       playsinline
     ></video>
@@ -182,7 +182,7 @@ html, body {
 
   <div id="label">
     <h1 id="lab-title">LAB 001</h1>
-    <p>Performance Science · Systems & Environment</p>
+    <p> Ground Lab 0001· Architectural design for systems & environment education</p>
     <div id="address">
       BTC ADDRESS
       <span>bc1qknzygd69f49ep4t70n96cvy56jmut0maezv7v7</span>
@@ -201,6 +201,14 @@ html, body {
     ></video>
   </div>
 
+  <div id="label">
+    <h1 id="lab-title">LAB 00xx</h1>
+    <p> Ground Lab 00xx· Architectural Innovative Spaces- Future Design</p>
+    <div id="address">
+      BTC ADDRESS
+      <span>bc1qknzygd69f49ep4t70n96cvy56jmut0maezv7v7</span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -231,7 +239,7 @@ function launchRocket() {
   document.body.appendChild(rocket);
   rocket.getBoundingClientRect();
 
-  rocket.style.transition = 'transform 2.8s linear';
+  rocket.style.transition = 'transform 4.0s linear';
   rocket.style.transform = `translate(${endX}px, ${endY}px)`;
 
   setTimeout(() => rocket.remove(), 3000);
