@@ -179,6 +179,17 @@ html, body {
       <div class="address"><span></span></div>
     </div>
   </div>
+  
+<div class="system-fuel">
+  <div class="fuel-title">SYSTEM FUEL</div>
+  <div class="fuel-metric">
+    <span id="fuel-btc">—</span> BTC RECEIVED
+  </div>
+  <div class="fuel-meta">
+    Inputs: <span id="fuel-count">—</span>
+  </div>
+  
+</div>
 
 </div>
 
@@ -244,6 +255,56 @@ document.querySelectorAll('.btc-title').forEach(title => {
     }
   };
 });
+
+  .system-fuel {
+  margin-top: 20px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+  font-size: 10px;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+
+.fuel-title {
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+
+.fuel-metric {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+}
+
+.fuel-meta {
+  margin-top: 6px;
+  opacity: 0.6;
+}
+
+  const BTC_ADDRESS = "bc1qknzygd69f49ep4t70n96cvy56jmut0maezv7v7";
+
+async function updateSystemFuel() {
+  try {
+    const res = await fetch(
+      `https://mempool.space/api/address/${BTC_ADDRESS}`
+    );
+    const data = await res.json();
+
+    const receivedBTC = data.chain_stats.funded_txo_sum / 100000000;
+    const txCount = data.chain_stats.funded_txo_count;
+
+    document.getElementById('fuel-btc').textContent = receivedBTC.toFixed(4);
+    document.getElementById('fuel-count').textContent = txCount;
+  } catch (e) {
+    console.log("Fuel signal unavailable");
+  }
+}
+
+// run once on load
+updateSystemFuel();
+
+// refresh every 60 seconds
+setInterval(updateSystemFuel, 60000);
+
 </script>
 
 </body>
